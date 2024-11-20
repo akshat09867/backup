@@ -39,7 +39,7 @@ const ReservationsTable = () => {
               <tr key={i.id}>
                 <td>{i.room_id}</td>
                 <td>{i.guest_id}</td>
-                <td>{i.FirstName}</td>
+                <td>{`${i.FirstName} ${i.MiddleName} ${i.LastName}`}</td>
                 <td>{i.check_in}</td>
                 <td>{i.check_out}</td>
                 <td>{i.status}</td>

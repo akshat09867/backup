@@ -95,7 +95,7 @@ app.post('/employee', async (req, res) => {
     return res.status(400).json({ error: 'Please fill in all the required fields' });
   }
 
-  const sql6 = `INSERT INTO employees (FirstName, MiddleName, LastName, DOB, Gender, PhoneNo, EmailId, Address, JobTitle, sallary)
+  const sql6 = `INSERT INTO employees (FirstName, MiddleName, LastName, DOB, Gender, PhoneNo, EmailId, Address, JobTitle, salary)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   db.query(sql6, [firstName, middleName, lastName, dob, gender, phone, email, address, jobtitle, salary], async (err, result) => {
     if (err) {
@@ -104,12 +104,29 @@ app.post('/employee', async (req, res) => {
     }
   });
 });
-app.get('info',async(req,res)=>{
-  const sql7=`select transactions.check_in, transactions.check_out, rooms.roomId, rooms.status
-  from transactions join  
-  `
-  db.query()
-})
+app.get('/', async (req, res) => {
+  const sql7 = `SELECT 
+                 t.id AS room_id, 
+                 g.FirstName, 
+                 g.MiddleName, 
+                 g.LastName, 
+                 t.check_in, 
+                 t.check_out, 
+                 t.status 
+                FROM transactions t 
+                JOIN guests g ON t.guest_id = g.id`;
+  db.query(sql7, (err, result6) => {
+    if (err) {
+      console.error('Error fetching data from transactions join guests MySQL:', err);
+      return res.status(500).json({ error: 'Database error while fetching reservations' });
+    }
+    console.log(JSON.stringify(result6, null, 2)); // Debug the result
+    res.json(result6); // Send the result to the client
+  });
+});
+
+
+// const sql8= `select id FirstName MiddleName LastName DOB Gender PhoneNo EmailId Address jobtitle salary from employees`
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
